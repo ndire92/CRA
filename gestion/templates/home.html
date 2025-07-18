@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Accueil | CRA Tivaouane{% endblock %}
+{% block content %}
+
+<div class="text-center py-5">
+  <h1 class="display-4 mb-3">⚽ Plateforme CRA Tivaouane</h1>
+  <p class="lead mb-4">Un système moderne et équitable de désignation des arbitres et inspecteurs</p>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      <p>
+        Cette plateforme permet :
+        <ul class="list-unstyled">
+          <li>✔️ aux <strong>arbitres</strong> de recevoir leurs désignations et signaler leur disponibilité</li>
+          <li>✔️ aux <strong>inspecteurs</strong> d’évaluer les arbitres et rédiger leurs rapports</li>
+          <li>✔️ aux <strong>administrateurs</strong> de gérer les compétitions, les matchs et les affectations</li>
+        </ul>
+      </p>
+    </div>
+  </div>
+
+  {% if not user.is_authenticated %}
+    <a href="{% url 'inscription' %}" class="btn btn-success btn-lg me-2">📝 Créer un compte</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">🔐 Se connecter</a>
+  {% else %}
+    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">🏁 Accéder au tableau de bord</a>
+  {% endif %}
+</div>
+
+{% endblock %}

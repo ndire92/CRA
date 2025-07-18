@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Rapports remplis{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">📝 Rapports remplis</h2>
+
+{% if rapports %}
+  <table class="table table-striped align-middle table-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Date</th>
+        <th>Match</th>
+        <th>Inspecteur</th>
+        <th>Note</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rapport in rapports %}
+        <tr>
+          <td>{{ rapport.designation.match.date_match|date:"d/m/Y H:i" }}</td>
+          <td>{{ rapport.designation.match.equipe_domicile }} vs {{ rapport.designation.match.equipe_exterieur }}</td>
+          <td>{{ rapport.inspecteur.user.get_full_name }}</td>
+          <td>{{ rapport.note_arbitre_central }}/20</td>
+          <td>
+            <a href="{% url 'voir_rapport' rapport.id %}" class="btn btn-sm btn-outline-primary">👁️ Voir</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <div class="alert alert-info text-center">Aucun rapport n'a encore été soumis.</div>
+{% endif %}
+
+{% endblock %}

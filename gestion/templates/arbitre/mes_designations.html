@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Mes désignations{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Mes désignations</h2>
+
+<ul class="list-group">
+  {% for d in designations %}
+    <li class="list-group-item">
+      🗓️ <strong>{{ d.match.date_match|date:"d/m/Y H:i" }}</strong><br>
+      ⚽ {{ d.match.equipe_domicile }} vs {{ d.match.equipe_exterieur }}<br>
+      📍 Lieu : {{ d.match.lieu }}<br>
+      🎯 Rôle : 
+      {% if d.arbitre_central.user == user %} Arbitre Central
+      {% elif d.arbitre_assistant1.user == user %} Assistant 1
+      {% elif d.arbitre_assistant2.user == user %} Assistant 2
+      {% elif d.quatrieme_arbitre.user == user %} Quatrième Arbitre
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">Aucune désignation trouvée.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

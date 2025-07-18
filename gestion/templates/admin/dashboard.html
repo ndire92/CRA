@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Dashboard CRA Tivaouane{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+
+  <!-- 👋 Bienvenue -->
+  <div class="text-center mb-5">
+    <h1 class="display-5">👋 Bienvenue {{ user.first_name|default:user.username }}</h1>
+    <p class="lead">Plateforme de désignation des arbitres et inspecteurs — Sous-CRA Tivaouane</p>
+  </div>
+
+  <!-- 📊 Statistiques -->
+  <div class="row text-center mb-4">
+
+<div class="col-md-3 mb-3">
+  <div class="card border-primary shadow-sm text-center">
+    <div class="card-body text-primary">
+      <i class="fa-solid fa-trophy fa-2x mb-2"></i>
+      <h5>Compétitions</h5>
+      <h4>{{ nb_competitions }}</h4>
+      <a href="{% url 'liste_competitions' %}" class="btn btn-outline-dark mt-2 w-100">
+        🔍 Voir la liste
+      </a>
+    </div>
+  </div>
+</div>
+
+ <div class="col-md-3 mb-3">
+  <div class="card border-success shadow-sm text-center">
+    <div class="card-body text-success">
+      <i class="fa-solid fa-futbol fa-2x mb-2"></i>
+      <h5>Matchs</h5>
+      <h4>{{ nb_matchs }}</h4>
+      <a href="{% url 'liste_matchs' %}" class="btn btn-outline-dark mt-2 w-100">
+        🔍 Voir la liste
+      </a>
+    </div>
+  </div>
+</div>
+
+    <div class="col-md-3 mb-3">
+  <div class="card border-warning shadow-sm text-center">
+    <div class="card-body text-warning">
+      <i class="fa-solid fa-user-shield fa-2x mb-2"></i>
+      <h5>Arbitres actifs</h5>
+      <h4>{{ nb_arbitres }}</h4>
+      <a href="{% url 'liste_arbitres' %}" class="btn btn-outline-dark mt-2 w-100">
+        🔍 Voir la liste
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-3 mb-3">
+  <div class="card border-info shadow-sm text-center">
+    <div class="card-body text-info">
+      <i class="fa-solid fa-eye fa-2x mb-2"></i>
+      <h5>Inspecteurs actifs</h5>
+      <h4>{{ nb_inspecteurs }}</h4>
+      <a href="{% url 'liste_inspecteurs' %}" class="btn btn-outline-dark mt-2 w-100">
+        🔍 Voir la liste
+      </a>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <!-- ⚙️ Actions rapides -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <a href="{% url 'creer_competition' %}" class="btn btn-outline-primary w-100">
+        ➕ Nouvelle compétition
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'creer_match' %}" class="btn btn-outline-success w-100">
+        🏟️ Nouveau match
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'liste_competitions' %}" class="btn btn-outline-secondary w-100">
+        📅 Compétitions
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'classement_arbitres' %}" class="btn btn-outline-warning w-100">
+        📊 Classement arbitres
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'liste_rapports' %}" class="btn btn-outline-info w-100">
+        📄 Liste des rapports
+          ({{ nb_rapports }})
+      </a>
+    </div>
+
+    <div class="col-md-3">
+      <a href="{% url 'matchs_a_designer' %}" class="btn btn-outline-danger w-100">
+        ➕ Ajouter désignation  ({{ nb_designations_restantes }})
+      </a>
+    </div>
+  </div>
+
+  <!-- 📋 Matchs sans désignation -->
+  <div class="mt-4">
+    <h3 class="mb-3"><i class="fa-solid fa-users-gear"></i> Matchs à désigner</h3>
+
+    {% if matchs_non_assignes %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Match</th>
+              <th>Compétition</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for match in matchs_non_assignes %}
+              <tr>
+                <td>{{ match.date_match|date:"d/m/Y H:i" }}</td>
+                <td>{{ match.equipe_domicile }} vs {{ match.equipe_exterieur }}</td>
+                <td>{{ match.competition.nom }}</td>
+                <td>
+                  <a href="{% url 'creer_designation' match.id %}" class="btn btn-sm btn-outline-primary">
+                    ➕ Désigner
+                  </a>
+                  <a href="{% url 'suggestion_designation' match.id %}" class="btn btn-sm btn-outline-secondary ms-1">
+                    🧠 Suggérer
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-success text-center">
+        ✅ Tous les matchs sont déjà désignés.
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

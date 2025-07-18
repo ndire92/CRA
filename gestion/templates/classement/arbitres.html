@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Classement des arbitres{% endblock %}
+{% block content %}
+
+<div class="container my-4">
+  <h2 class="mb-4 text-center"><i class="fa-solid fa-ranking-star"></i> Classement des arbitres</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Nom</th>
+          <th>Niveau</th>
+          <th>Postes préférés</th>
+          <th>Note moyenne</th>
+          <th>Matchs arbitrés</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for arbitre in arbitres %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ arbitre.user.get_full_name }}</td>
+          <td>{{ arbitre.get_niveau_display }}</td>
+
+              <td>{{ arbitre.postes_preferes}}</td>
+
+          <td><strong>{{ arbitre.note_moyenne|floatformat:2 }}</strong> / 20</td>
+          <td>{{ arbitre.nombre_matchs }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">Aucun arbitre trouvé pour le moment.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

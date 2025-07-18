@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Nouvelle indisponibilité{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">⛔ Indiquer une indisponibilité</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-danger">Enregistrer</button>
+</form>
+
+<a href="{% url 'mes_disponibilites' %}" class="btn btn-outline-secondary mt-3">← Retour</a>
+
+{% endblock %}

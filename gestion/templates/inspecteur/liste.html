@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Liste des inspecteurs{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">🕵️ Inspecteurs actifs</h2>
+
+<table class="table table-striped align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Telephone</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in inspecteurs %}
+      <tr>
+        <td>{{ i.user.last_name }}</td>
+        <td>{{ i.user.first_name }}</td>
+        <td>{{ i.user.email }}</td>
+        <td>{{ i.user.telephone|default:"—" }}</td>
+
+
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

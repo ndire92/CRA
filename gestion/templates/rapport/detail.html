@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Détails du rapport{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">📝 Rapport d’inspection</h2>
+
+<div class="mb-3">
+  <strong>Match :</strong> {{ rapport.designation.match.equipe_domicile }} vs {{ rapport.designation.match.equipe_exterieur }}<br>
+  <strong>Date :</strong> {{ rapport.designation.match.date_match|date:"d/m/Y H:i" }}<br>
+  <strong>Inspecteur :</strong> {{ rapport.inspecteur.user.get_full_name }}
+</div>
+
+<h4>Note arbitrale : {{ rapport.note_arbitre_central }}/20</h4>
+
+<p><strong>Commentaire :</strong><br>{{ rapport.commentaire|linebreaks }}</p>
+
+<a href="{% url 'liste_rapports' %}" class="btn btn-outline-secondary mt-3">← Retour</a>
+
+{% endblock %}

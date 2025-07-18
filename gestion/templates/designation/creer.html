@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Nouvelle désignation{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4 text-center fw-bold">➕ Nouvelle désignation</h2>
+
+  <!-- 🟦 Match concerné -->
+  <div class="alert alert-primary shadow-sm rounded-3">
+    <h5 class="mb-2">
+      ⚽ {{ match.equipe_domicile }} <span class="text-muted">vs</span> {{ match.equipe_exterieur }}
+    </h5>
+    <p class="mb-0">
+      📅 <strong>{{ match.date_match|date:"d/m/Y H:i" }}</strong><br>
+      📍 <strong>{{ match.lieu|default:"Lieu non précisé" }}</strong>
+    </p>
+  </div>
+
+  <!-- ✅ Messages de retour -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- ✅ Erreurs globales -->
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <!-- 📝 Formulaire de désignation -->
+  <form method="post" class="mb-4 shadow p-4 rounded bg-light">
+    {% csrf_token %}
+    {{ form.match }}  <!-- Champ caché indispensable -->
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <fieldset class="border p-3 rounded-3 bg-white shadow-sm">
+          <legend class="w-auto mb-2 fw-semibold">👤 Arbitres</legend>
+          <div class="mb-2">{{ form.arbitre_central.label_tag }} {{ form.arbitre_central }}</div>
+          <div class="mb-2">{{ form.arbitre_assistant1.label_tag }} {{ form.arbitre_assistant1 }}</div>
+          <div class="mb-2">{{ form.arbitre_assistant2.label_tag }} {{ form.arbitre_assistant2 }}</div>
+          <div>{{ form.quatrieme_arbitre.label_tag }} {{ form.quatrieme_arbitre }}</div>
+        </fieldset>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <fieldset class="border p-3 rounded-3 bg-white shadow-sm">
+          <legend class="w-auto mb-2 fw-semibold">🕵️ Inspecteur</legend>
+          {{ form.inspecteur.label_tag }} {{ form.inspecteur }}
+        </fieldset>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100 fw-bold py-2">✅ Valider la désignation</button>
+  </form>
+
+  {% if lien_whatsapp_admin %}
+    <a href="{{ lien_whatsapp_admin }}" target="_blank" class="btn btn-outline-success w-100 mb-3">
+      📲 M’envoyer un rappel WhatsApp
+    </a>
+  {% endif %}
+
+  <a href="{% url 'dashboard' %}" class="btn btn-secondary w-100">⬅️ Retour au tableau de bord</a>
+</div>
+{% endblock %}

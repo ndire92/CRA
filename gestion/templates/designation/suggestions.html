@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Suggestions de désignation{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">🧠 Suggestions pour le match :</h2>
+<div class="alert alert-light border">
+  <strong>{{ match.equipe_domicile }}</strong> vs <strong>{{ match.equipe_exterieur }}</strong>
+  — {{ match.date_match|date:"d/m/Y H:i" }} à {{ match.lieu }}
+</div>
+
+<h4 class="mt-4">✅ Arbitres disponibles ce jour-là</h4>
+<ul class="list-group mb-4">
+  {% for arbitre in arbitres %}
+    <li class="list-group-item d-flex justify-content-between">
+      {{ arbitre.user.get_full_name }} — {{ arbitre.get_niveau_display }} ({{ arbitre.nb_designations }} désignations)
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">Aucun arbitre disponible ce jour-là.</li>
+  {% endfor %}
+</ul>
+
+<h4>🕵🏿 Inspecteurs disponibles</h4>
+<ul class="list-group mb-4">
+  {% for inspecteur in inspecteurs %}
+    <li class="list-group-item d-flex justify-content-between">
+      {{ inspecteur.user.get_full_name }} — {{ inspecteur.get_niveau_display }}
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">Aucun inspecteur disponible.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Retour</a>
+
+{% endblock %}

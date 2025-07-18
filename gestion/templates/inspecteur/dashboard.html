@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord Inspecteur{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Bonjour {{ user.first_name }},</h2>
+
+{% if designations %}
+  <h4>Rapports à compléter :</h4>
+  <ul class="list-group">
+    {% for d in rapports_restants %}
+      <li class="list-group-item">
+        Match : {{ d.match }}<br>
+        Date : {{ d.match.date_match|date:"d/m/Y H:i" }}
+        <a href="{% url 'remplir_rapport' d.id %}" class="btn btn-sm btn-primary float-end">📝 Remplir</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-muted">Aucun match en attente de rapport.</p>
+{% endif %}
+{% endblock %}

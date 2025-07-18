@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Mes Disponibilités{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📅 Mes disponibilités</h2>
+
+<a href="{% url 'ajouter_disponibilite' %}" class="btn btn-outline-success mb-3">
+  ➕ Ajouter une disponibilité
+</a>
+
+<ul class="list-group">
+  {% for d in disponibilites %}
+    <li class="list-group-item">
+      {{ d.date_debut }} → {{ d.date_fin }} —
+      {% if d.disponible %}
+        <span class="text-success">Disponible</span>
+      {% else %}
+        <span class="text-danger">Indisponible</span>
+      {% endif %}
+      {% if d.commentaire %}
+        <br><small class="text-muted">{{ d.commentaire }}</small>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">Aucune disponibilité enregistrée.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

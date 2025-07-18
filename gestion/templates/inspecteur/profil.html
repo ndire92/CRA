@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Profil Inspecteur{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Mon Profil d'inspecteur</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Mettre à jour</button>
+</form>
+{% endblock %}

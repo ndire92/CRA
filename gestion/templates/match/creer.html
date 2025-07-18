@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Créer un Match{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Créer un nouveau match</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Créer le match</button>
+</form>
+{% endblock %}
