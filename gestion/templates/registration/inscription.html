@@ -1,22 +1,89 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription CRA</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            padding: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #219150;
+        }
+        .errors {
+            color: red;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📝 Inscription CRA</h2>
 
-{% block title %}Inscription{% endblock %}
+        {% if form.errors %}
+            <div class="errors">
+                <p>Veuillez corriger les erreurs suivantes :</p>
+                {{ form.errors }}
+            </div>
+        {% endif %}
 
-{% block content %}
-<div class="container mt-5">
-  <h2 class="mb-4 text-center">📝 Créer un compte</h2>
-
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-success btn-lg">✅ S'inscrire</button>
-        </div>
-      </form>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="errors">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Créer mon compte</button>
+        </form>
     </div>
-  </div>
-</div>
-{% endblock %}
+</body>
+</html>

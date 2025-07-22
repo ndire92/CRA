@@ -9,6 +9,7 @@
     <tr>
       <th>Nom</th>
       <th>Prénom</th>
+      <th>Postes préférés</th>
     <th>Email</th>
     <th>Téléphone</th>
     <th>Note moyenne</th>
@@ -21,10 +22,9 @@
       <tr>
         <td>{{ a.user.last_name }}</td>
         <td>{{ a.user.first_name }}</td>
+        <td>{{ a.user.postes_preferes }}</td>
         <td>{{ a.user.email }}</td>
         <td>{{ a.user.telephone|default:"—" }}</td>
-
-
         <td>{{ a.note_moyenne|default:"—" }}</td>
       </tr>
     {% endfor %}

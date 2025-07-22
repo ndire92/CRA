@@ -1,11 +1,92 @@
-{% extends "base.html" %}
-{% block title %}Connexion{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion CRA</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef3f9;
+            padding: 40px;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #2d89ef;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2464bb;
+        }
+        .errors {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>🔐 Connexion CRA</h2>
 
-{% block content %}
-<h2 class="mb-4">Se connecter</h2>
+        {% if form.errors %}
+            <div class="errors">
+                <p>Email ou mot de passe incorrect.</p>
+            </div>
+        {% endif %}
+
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Connexion</button>
+    {% csrf_token %}
+    <div class="form-field">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+
+    <div class="form-field">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <button type="submit">Se connecter</button>
 </form>
-{% endblock %}
+{% if form.errors %}
+  <div style="color: red;">
+    {{ form.errors }}
+  </div>
+{% endif %}
+
+
+    </div>
+</body>
+</html>

@@ -9,9 +9,8 @@ urlpatterns = [
     path('dashboard', views.dashboard_view, name='dashboard'),
     # Inscription utilisateur
     path('inscription/', views.inscription_view, name='inscription'),
-    path('login/',auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/',auth_views.LogoutView.as_view(), name='logout'),
-
+    path('login/', views.login_view, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     # Profils
     path('profil/arbitre/', views.profil_arbitre_view, name='profil_arbitre'),
@@ -24,6 +23,7 @@ urlpatterns = [
     # Désignations (consultation pour arbitre)
     path('mes-designations/', views.mes_designations_view, name='mes_designations'),
     path('designations/en-attente/', views.matchs_a_designer_view, name='matchs_a_designer'),
+    path('arbitres-par-zone/', views.arbitres_par_zone, name='arbitres_par_zone'),
 
     # Création de match et désignation (admin)
     path('match/nouveau/', views.creer_match_view, name='creer_match'),
@@ -39,5 +39,20 @@ urlpatterns = [
     path('rapports/<int:rapport_id>/', views.voir_rapport_view, name='voir_rapport'),
     path('arbitres/', views.liste_arbitres_view, name='liste_arbitres'),
     path('inspecteurs/', views.liste_inspecteurs_view, name='liste_inspecteurs'),
+    # Rapport d'arbitres
+   # 📝 Soumission du rapport
+    path('rapports_arbitres/creer/<int:match_id>/', views.creer_rapport_view, name='soumettre_rapport'),
+
+    # ✅ Confirmation
+    path('rapports_arbitres/succes/', views.rapport_succes_view, name='rapport_succes'),
+
+    # 👁️ Consultation PDF
+    path('rapports_arbitres/<int:rapport_id>/pdf/', views.telecharger_rapport_view, name='telecharger_rapport'),
+
+    # 👁️ Lecture HTML du rapport
+    path('rapports_arbitres/voir/<int:rapport_id>/', views.voir_rapport_view, name='voir_rapport'),
+    path('rapports_arbitres/mes/', views.mes_rapports_view, name='mes_rapports'),
+path('rapports_arbitres/modifier/<int:rapport_id>/', views.modifier_rapport_view, name='modifier_rapport'),
+  
 
 ]

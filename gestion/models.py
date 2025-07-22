@@ -12,16 +12,31 @@ class User(AbstractUser):
         ('inspecteur', 'Inspecteur'),
         ('admin', 'Administrateur'),
     ]
-    username = models.CharField(max_length=150, unique=True)  # gardé pour compatibilité
+    ZONE_CHOICES = [
+        ("Tivaouane", "Tivaouane"),
+        ("Mboro", "Mboro"),
+        ("Meckhe", "Meckhe"),
+        ("Pambale", "Pambale"),
+    ]
+
+
+
+
     email = models.EmailField(unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']  # requis pour Django
-
-
+    username = models.CharField(max_length=150, unique=True)  # obligatoire si AbstractUser
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     telephone = models.CharField(max_length=15, blank=True)
     date_naissance = models.DateField(null=True, blank=True)
-    adresse = models.TextField(blank=True)
+    zone = models.CharField(max_length=50, choices=ZONE_CHOICES, blank=True, null=True)
+
+
+
+    USERNAME_FIELD = 'email'  # identifiant principal pour l’authentification
+    REQUIRED_FIELDS = ['username']  # requis lors du create_superuser
+
+    def __str__(self):
+        return f"{self.get_full_name()} ({self.email})"
+
 
 
 # --------------------- ARBITRES ---------------------
@@ -225,8 +240,100 @@ class Rapport(models.Model):
 
     def __str__(self):
         return f"Rapport - {self.designation.match}"
+
+
+class RapportMatch(models.Model):
+    match = models.OneToOneField('Match', on_delete=models.CASCADE, verbose_name="Match concerné")
+    arbitre_central = models.ForeignKey('Arbitre', on_delete=models.CASCADE, verbose_name="Arbitre central")
+
+    # 👮 Logistique
+    service_ordre_present = models.BooleanField(default=False, verbose_name="Service d’ordre présent")
+    secouristes_present = models.BooleanField(default=False, verbose_name="Présence des secouristes")
+    delegue_present = models.BooleanField(default=False, verbose_name="Délégué présent")
+
+    # ⚽ Statut du match
+    match_joue = models.BooleanField(default=True, verbose_name="Match joué")
+    motif_non_joue = models.TextField(blank=True, null=True, verbose_name="Motif si le match n’a pas été joué")
+
+    # 💬 Appréciation
+    remarques_arbitre = models.TextField(blank=True, null=True, verbose_name="Remarques de l’arbitre")
+
+    # 📅 Suivi
+    date_rapport = models.DateTimeField(auto_now_add=True, verbose_name="Date du rapport")
+
+    class Meta:
+        verbose_name = "Rapport de match"
+        verbose_name_plural = "Rapports de match"
+
+    def __str__(self):
+        return f"Rapport - {self.match} ({self.arbitre_central})"
     
-    
+
+class SanctionDisciplinaire(models.Model):
+    rapport = models.ForeignKey(RapportMatch, on_delete=models.CASCADE, related_name="sanctions", verbose_name="Rapport lié")
+    equipe = models.CharField(
+        max_length=20,
+        choices=[('domicile', 'Équipe domicile'), ('exterieur', 'Équipe extérieur')],
+        verbose_name="Équipe concernée"
+    )
+    joueur_dossard = models.CharField(max_length=5, verbose_name="Dossard du joueur")
+    type_carton = models.CharField(
+        max_length=10,
+        choices=[('jaune', '🟨 Avertissement'), ('rouge', '🟥 Expulsion')],
+        verbose_name="Type de carton"
+    )
+    minute = models.PositiveIntegerField(verbose_name="Minute")
+    remarque = models.TextField(blank=True, null=True, verbose_name="Remarques")
+
+    class Meta:
+        verbose_name = "Sanction disciplinaire"
+        verbose_name_plural = "Sanctions disciplinaires"
+        ordering = ['minute']
+
+    def __str__(self):
+        return f"{self.joueur_dossard} ({self.equipe}) – {self.type_carton} à {self.minute}′"
+
+
+class EvenementBut(models.Model):
+    rapport = models.ForeignKey(RapportMatch, on_delete=models.CASCADE, related_name="buts", verbose_name="Rapport lié")
+    equipe = models.CharField(
+        max_length=20,
+        choices=[('domicile', 'Équipe domicile'), ('exterieur', 'Équipe extérieur')],
+        verbose_name="Équipe"
+    )
+    joueur_dossard = models.CharField(max_length=5, verbose_name="Dossard du buteur")
+    minute = models.PositiveIntegerField(verbose_name="Minute du but")
+    remarque = models.TextField(blank=True, null=True, verbose_name="Remarques")
+
+    class Meta:
+        verbose_name = "But"
+        verbose_name_plural = "Buts"
+        ordering = ['minute']
+
+    def __str__(self):
+        return f"{self.joueur_dossard} ({self.equipe}) – But à {self.minute}′"
+
+
+class EvenementRemplacement(models.Model):
+    rapport = models.ForeignKey(RapportMatch, on_delete=models.CASCADE, related_name="remplacements", verbose_name="Rapport lié")
+    equipe = models.CharField(
+        max_length=20,
+        choices=[('domicile', 'Équipe domicile'), ('exterieur', 'Équipe extérieur')],
+        verbose_name="Équipe"
+    )
+    joueur_sortant = models.CharField(max_length=5, verbose_name="Dossard du joueur sortant")
+    joueur_entrant = models.CharField(max_length=5, verbose_name="Dossard du joueur entrant")
+    minute = models.PositiveIntegerField(verbose_name="Minute du remplacement")
+    remarque = models.TextField(blank=True, null=True, verbose_name="Remarques")
+
+    class Meta:
+        verbose_name = "Remplacement"
+        verbose_name_plural = "Remplacements"
+        ordering = ['minute']
+
+    def __str__(self):
+        return f"{self.joueur_sortant} ⟶ {self.joueur_entrant} à {self.minute}′ ({self.equipe})"
+
 
 class Cours(models.Model):
     titre = models.CharField(max_length=200)

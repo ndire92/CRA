@@ -35,6 +35,12 @@
   <form method="post" class="mb-4 shadow p-4 rounded bg-light">
     {% csrf_token %}
     {{ form.match }}  <!-- Champ caché indispensable -->
+ <!-- 🌍 Zone choisie -->
+  <div class="mb-3">
+    <label for="zone-select" class="form-label">📍 Zone géographique</label>
+    {{ form.zone }}
+  </div>
+
 
     <div class="row">
       <div class="col-md-6 mb-3">
@@ -66,4 +72,38 @@
 
   <a href="{% url 'dashboard' %}" class="btn btn-secondary w-100">⬅️ Retour au tableau de bord</a>
 </div>
+<script>
+  $(document).ready(function () {
+    $('.form-select').select2({
+      width: '100%',
+      placeholder: 'Choisir un arbitre…',
+      allowClear: true
+    });
+  });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('#zone-select').change(function () {
+    const zone = $(this).val();
+    $.get('/arbitres-par-zone/', { zone: zone }, function (data) {
+      const champs = [
+        '#id_arbitre_central',
+        '#id_arbitre_assistant1',
+        '#id_arbitre_assistant2',
+        '#id_quatrieme_arbitre',
+        '#id_inspecteur'
+      ];
+
+      champs.forEach(function (id) {
+        const select = $(id);
+        const type = id.includes('inspecteur') ? 'inspecteurs' : 'arbitres';
+        select.empty();
+
+        data[type].forEach(function (item) {
+          select.append(new Option(item.text, item.id));
+        });
+      });
+    });
+  });
+</script>
 {% endblock %}

@@ -8,6 +8,8 @@
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -24,6 +26,9 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'profil_arbitre' %}">Mon profil</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'mes_designations' %}">Mes désignations</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'mes_disponibilites' %}">Ma disponibilité</a></li>
+               <li class="nav-item"><a class="nav-link" href="{% url 'mes_rapports' %}"> 📝 Rapports arbitres  </a></li>
+   
+
             {% elif user.role == 'inspecteur' %}
               <li class="nav-item"><a class="nav-link" href="{% url 'profil_inspecteur' %}">Mon profil</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'mes_disponibilites' %}">Ma disponibilité</a></li>
@@ -61,4 +66,16 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('.form-select').select2({
+      width: '100%',
+      placeholder: 'Choisir un arbitre…',
+      allowClear: true
+    });
+  });
+</script>
 </html>

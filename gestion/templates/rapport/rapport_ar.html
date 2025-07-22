@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if modification %}
+    Modifier le rapport CRA
+  {% else %}
+    Créer un rapport CRA
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if modification %}
+  <h2 class="mb-4 text-warning">✏️ Modifier le rapport du match {{ match }}</h2>
+{% else %}
+  <h2 class="mb-4">📝 Soumettre le rapport du match {{ match }}</h2>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+
+  <!-- 📋 Rapport principal -->
+  <fieldset class="border p-3 mb-4">
+    <legend>📋 Informations générales</legend>
+    {{ form.as_p }}
+  </fieldset>
+
+  <!-- 🟥 Sanctions disciplinaires -->
+  <fieldset class="border p-3 mb-4">
+    <legend>🟥 Sanctions disciplinaires</legend>
+    {{ sanction_formset.management_form }}
+    {% for form in sanction_formset %}
+      <div class="card mb-2 p-2">
+        {{ form.as_p }}
+      </div>
+    {% endfor %}
+  </fieldset>
+
+  <!-- ⚽ Buteurs -->
+  <fieldset class="border p-3 mb-4">
+    <legend>⚽ Buteurs</legend>
+    {{ but_formset.management_form }}
+    {% for form in but_formset %}
+      <div class="card mb-2 p-2">
+        {{ form.as_p }}
+      </div>
+    {% endfor %}
+  </fieldset>
+
+  <!-- 🔁 Remplacements -->
+  <fieldset class="border p-3 mb-4">
+    <legend>🔁 Remplacements</legend>
+    {{ remplacement_formset.management_form }}
+    {% for form in remplacement_formset %}
+      <div class="card mb-2 p-2">
+        {{ form.as_p }}
+      </div>
+    {% endfor %}
+  </fieldset>
+
+  <!-- ✅ Bouton d’action -->
+  <button type="submit" class="btn btn-primary">
+    {% if modification %}
+      💾 Mettre à jour le rapport
+    {% else %}
+      ✅ Enregistrer le rapport
+    {% endif %}
+  </button>
+</form>
+
+{% endblock %}

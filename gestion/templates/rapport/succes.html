@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Rapport soumis{% endblock %}
+{% block content %}
+
+<div class="text-center py-5">
+  <h2>✅ Rapport enregistré avec succès</h2>
+  <p>Merci d’avoir rempli le rapport CRA pour ce match.</p>
+  <a href="{% url 'dashboard' %}" class="btn btn-success mt-3">Retour au tableau de bord</a>
+</div>
+
+{% endblock %}

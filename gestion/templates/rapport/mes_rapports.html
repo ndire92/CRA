@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">📝 Mes rapports</h2>
+
+{% if rapports %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Match</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rapport in rapports %}
+    <tr>
+      <td>{{ rapport.match }}</td>
+      <td>{{ rapport.date_rapport|date:"d/m/Y H:i" }}</td>
+      <td>
+        <a href="{% url 'voir_rapport' rapport.id %}" class="btn btn-sm btn-outline-primary">👁️ Voir</a>
+        <a href="{% url 'telecharger_rapport' rapport.id %}" class="btn btn-sm btn-outline-success">📄 PDF</a>
+        <a href="{% url 'modifier_rapport' rapport.id %}" class="btn btn-sm btn-warning">
+  ✏️ Modifier
+</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">Aucun rapport soumis pour le moment.</div>
+{% endif %}
+
+{% endblock %}

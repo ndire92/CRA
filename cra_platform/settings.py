@@ -128,7 +128,6 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'gestion.User'
-
 from pathlib import Path
 from decouple import config  # ← juste ici en haut
 
@@ -141,6 +140,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = f"Sous-CRA Tivaouane <{EMAIL_HOST_USER}>"
-
-
-CLE_API_360DIALOG = config("CLE_API_360DIALOG")

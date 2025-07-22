@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Rapport CRA - {{ rapport.match }}{% endblock %}
+{% block content %}
+
+<h2 class="mb-3">📝 Rapport du match {{ rapport.match }}</h2>
+<p><strong>Arbitre central :</strong> {{ rapport.arbitre_central }}</p>
+<p><strong>Date du rapport :</strong> {{ rapport.date_rapport|date:"d/m/Y H:i" }}</p>
+
+<hr>
+
+<h4>📋 Logistique</h4>
+<ul>
+  <li>Service d’ordre présent : {{ rapport.service_ordre_present|yesno:"Oui,Non" }}</li>
+  <li>Secouristes présents : {{ rapport.secouristes_present|yesno:"Oui,Non" }}</li>
+  <li>Délégué présent : {{ rapport.delegue_present|yesno:"Oui,Non" }}</li>
+</ul>
+
+<h4>⚽ Buteurs</h4>
+{% if rapport.buts.exists %}
+  <ul>
+    {% for but in rapport.buts.all %}
+      <li>{{ but.minute }}′ – {{ but.equipe }} – N°{{ but.joueur_dossard }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aucun but enregistré.</p>
+{% endif %}
+
+<h4>🟥 Sanctions disciplinaires</h4>
+{% if rapport.sanctions.exists %}
+  <ul>
+    {% for s in rapport.sanctions.all %}
+      <li>{{ s.minute }}′ – {{ s.equipe }} – N°{{ s.joueur_dossard }} – {{ s.type_carton }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aucune sanction enregistrée.</p>
+{% endif %}
+
+<h4>🔁 Remplacements</h4>
+{% if rapport.remplacements.exists %}
+  <ul>
+    {% for r in rapport.remplacements.all %}
+      <li>{{ r.minute }}′ – {{ r.equipe }} : {{ r.joueur_entrant }} remplace {{ r.joueur_sortant }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aucun remplacement enregistré.</p>
+{% endif %}
+
+<h4>🗒️ Remarques</h4>
+<p>{{ rapport.remarques_arbitre|default:"-" }}</p>
+
+<a href="{% url 'telecharger_rapport' rapport.id %}" class="btn btn-outline-secondary">📄 Télécharger en PDF</a>
+
+{% endblock %}

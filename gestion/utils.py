@@ -1,17 +1,24 @@
 import pywhatkit
-import datetime
+
+def formater_numero_senegalais(numero):
+    numero = numero.strip()
+    if not numero.startswith("+"):
+        if numero.startswith("0"):
+            numero = "+221" + numero[1:]
+        elif numero.startswith("7"):
+            numero = "+221" + numero
+    return numero
+
+def nettoyer_message(message):
+    return ''.join(c for c in message if ord(c) < 128)
 
 def envoyer_whatsapp_local(numero, message):
-    """
-    Ouvre WhatsApp Web à l’heure actuelle + 2 minutes pour envoyer un message.
-    """
-    maintenant = datetime.datetime.now()
-    heure = maintenant.hour
-    minute = maintenant.minute + 2
+    numero = formater_numero_senegalais(numero)
+    message = nettoyer_message(message)
 
-    # Gestion dépassement de 60 minutes
-    if minute >= 60:
-        minute -= 60
-        heure = (heure + 1) % 24
-
-    pywhatkit.sendwhatmsg(numero, message, heure, minute)
+    pywhatkit.sendwhatmsg_instantly(
+        phone_no=numero,
+        message=message,
+        wait_time=2,       # ← temps pour laisser WhatsApp Web se charger
+        tab_close=True      # ← ferme l’onglet après envoi
+    )
